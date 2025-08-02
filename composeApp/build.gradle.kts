@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -50,6 +51,8 @@ kotlin {
 
             //firebase
             implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
+
+            implementation("io.insert-koin:koin-android:3.5.0")
         }
 
         iosMain.dependencies {
@@ -71,6 +74,13 @@ kotlin {
             // SQLDelight runtime for version 1.5.x
             implementation("com.squareup.sqldelight:runtime:1.5.5")
             implementation("com.squareup.sqldelight:coroutines-extensions:1.5.5")
+
+
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+            implementation("com.benasher44:uuid:0.8.1")
+
+            implementation("io.insert-koin:koin-core:3.5.0")
+            implementation("io.insert-koin:koin-android:3.5.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

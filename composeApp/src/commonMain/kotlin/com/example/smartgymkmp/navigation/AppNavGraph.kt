@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.smartgymkmp.ui.dashboard.DashboardScreen
+import com.example.smartgymkmp.ui.membermanagement.MemberManagementScreen
 
 @Composable
 fun AppNavGraph(
@@ -53,7 +54,7 @@ fun AppNavGraph(
 
 
         composable("memberManagement") {
-//            MemberManagementScreen(navController)
+            MemberManagementScreen(navController)
         }
 
         composable("memberProfile/{memberId}") { backStackEntry ->

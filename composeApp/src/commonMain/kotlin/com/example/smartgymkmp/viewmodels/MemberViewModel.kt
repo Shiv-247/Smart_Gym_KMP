@@ -13,6 +13,7 @@ import com.example.smartgymkmp.network.fetchMembersFromFirestore
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+
 class MemberViewModel(
     private val repository: MemberRepository
 ) : ViewModel() {
