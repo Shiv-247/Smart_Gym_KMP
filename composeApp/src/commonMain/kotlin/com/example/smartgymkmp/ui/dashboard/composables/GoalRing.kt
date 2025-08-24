@@ -25,7 +25,11 @@ fun GoalRing(
     target: Int,
     color: Color
 ) {
-    val progress = current.toFloat() / target.toFloat()
+    val progress = if (target > 0) {
+        (current.toFloat() / target).coerceIn(0f, 1f)
+    } else {
+        0f // Default to 0 if target is 0 to avoid division by zero
+    }
     val animatedProgress by animateFloatAsState(targetValue = progress, label = "")
 
     Column(

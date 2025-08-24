@@ -39,18 +39,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartgymkmp.domain.model.ActivityLevel
 import com.example.smartgymkmp.viewmodels.MemberViewModel
+import kotlin.compareTo
+import kotlin.text.toInt
 
 @Composable
-fun HeroSection(viewModel: MemberViewModel, memberId: String = "1") {
+fun HeroSection(
+    viewModel: MemberViewModel,
+    memberId: String = "1"
+) {
     var selectedMood by remember { mutableStateOf(2) }
     val moods = listOf("😴", "😐", "😊", "💪", "🔥")
     val calories by viewModel.calories.collectAsState()
 
-    // Load calories data when composable is first created
+    val activityLevel = remember { ActivityLevel.MODERATE }
+
     LaunchedEffect(memberId) {
-        viewModel.calculateCalories(memberId)
+        viewModel.ensureMemberExists(memberId)
+        viewModel.calculateCalories(memberId, activityLevel)
     }
+
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -61,14 +70,12 @@ fun HeroSection(viewModel: MemberViewModel, memberId: String = "1") {
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            // User greeting and other sections remain the same...
-
+            // Greeting
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-            )
-            {
+            ) {
                 Column {
                     Text(
                         "Good morning, Alex",
@@ -107,8 +114,8 @@ fun HeroSection(viewModel: MemberViewModel, memberId: String = "1") {
             ) {
                 GoalRing(
                     title = "Calories",
-                    current = calories, // Use dynamic calories from viewModel
-                    target = 800,
+                    current = calories.tdee.let { if (it.isNaN() || it <= 0) 0 else it.toInt() },
+                    target = calories.tdee.let { if (it.isNaN() || it <= 0) 2000 else (it * 1.1).toInt() },
                     color = Color(0xFF4CAF50)
                 )
                 GoalRing(
@@ -125,7 +132,7 @@ fun HeroSection(viewModel: MemberViewModel, memberId: String = "1") {
                 )
             }
 
-            // Fix the mood selector by removing the duplicate selectedMood declaration
+            // Mood Selector
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -143,7 +150,12 @@ fun HeroSection(viewModel: MemberViewModel, memberId: String = "1") {
                             modifier = Modifier
                                 .padding(4.dp)
                                 .clip(CircleShape)
-                                .background(if (selectedMood == index) MaterialTheme.colorScheme.primaryContainer else Color.Transparent)
+                                .background(
+                                    if (selectedMood == index)
+                                        MaterialTheme.colorScheme.primaryContainer
+                                    else
+                                        Color.Transparent
+                                )
                                 .clickable { selectedMood = index }
                                 .padding(8.dp)
                         ) {
