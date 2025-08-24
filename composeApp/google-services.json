@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "981673895021",
+    "project_id": "smartgymkmp-c7212",
+    "storage_bucket": "smartgymkmp-c7212.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981673895021:android:58b764254af05143908b64",
+        "android_client_info": {
+          "package_name": "com.example.smartgymkmp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-illAHiFdYmB3HLDhvPlC-Qj0GYUzhFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

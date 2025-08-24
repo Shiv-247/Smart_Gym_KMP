@@ -46,47 +46,42 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun SmartGymApp() {
     val navController = rememberNavController()
-//    val paymentViewModel: PaymentViewModel = viewModel(
-//        factory = ViewModelProvider.AndroidViewModelFactory(LocalContext.current.applicationContext as Application)
-//    )
-
-//    val viewModel: RoutineViewModel = viewModel(factory = ViewModelProvider.AndroidViewModelFactory(LocalContext.current.applicationContext as Application))
-
-    LaunchedEffect(Unit) {
-//        viewModel.loadRoutine()
-    }
-
     val currentDestination = navController
         .currentBackStackEntryAsState().value?.destination?.route
 
     val routine = rememberSaveable { mutableStateOf<Map<String, String>>(emptyMap()) }
 
+    // Only show bottom navigation if not on login screen
+    val showBottomNav = currentDestination != null && currentDestination != "login"
+
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = currentDestination == "dashboard",
-                    onClick = { navController.navigate("dashboard") },
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Dashboard") },
-                    label = { Text("Dashboard") }
-                )
-                NavigationBarItem(
-                    selected = currentDestination == "workoutRoutine",
-                    onClick = { navController.navigate("workoutRoutine") },
-                    icon = { Icon(Icons.Default.DateRange, contentDescription = "Routine") },
-                    label = { Text("My Routine") }
-                )
+            if (showBottomNav) {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = currentDestination == "dashboard",
+                        onClick = { navController.navigate("dashboard") },
+                        icon = { Icon(Icons.Default.Home, contentDescription = "Dashboard") },
+                        label = { Text("Dashboard") }
+                    )
+                    NavigationBarItem(
+                        selected = currentDestination == "workoutRoutine",
+                        onClick = { navController.navigate("workoutRoutine") },
+                        icon = { Icon(Icons.Default.DateRange, contentDescription = "Routine") },
+                        label = { Text("My Routine") }
+                    )
+
+                }
             }
         }
     ) { padding ->
         Box(modifier = Modifier.padding(padding)) {
             AppNavGraph(
                 navController = navController,
-                routine = routine,
+                routine = routine
             )
         }
     }
 }
-
 
 

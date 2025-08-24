@@ -8,9 +8,11 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.sqldelight)
+    alias(libs.plugins.google.services)
 }
 
-// SQLDelight configuration for version 1.5.x
+
+// SQLDelight configuration
 sqldelight {
     database("SmartGymDatabase") {
         packageName = "com.example.smartgymkmp.database"
@@ -37,7 +39,6 @@ kotlin {
     }
 
     sourceSets {
-
         androidMain.dependencies {
             implementation(compose.material)
             implementation(compose.preview)
@@ -51,12 +52,16 @@ kotlin {
 
             //firebase
             implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
+            implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
 
+            // koin android
             implementation("io.insert-koin:koin-android:3.5.0")
+
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
         }
 
         iosMain.dependencies {
-            // SQLDelight iOS driver for version 1.5.x
+            // SQLDelight iOS driver
             implementation("com.squareup.sqldelight:native-driver:1.5.5")
         }
 
@@ -71,17 +76,20 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.0-beta03")
             implementation(compose.materialIconsExtended)
-            // SQLDelight runtime for version 1.5.x
+
+            // SQLDelight runtime
             implementation("com.squareup.sqldelight:runtime:1.5.5")
             implementation("com.squareup.sqldelight:coroutines-extensions:1.5.5")
 
-
+            // utilities
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
             implementation("com.benasher44:uuid:0.8.1")
 
+            // koin common
             implementation("io.insert-koin:koin-core:3.5.0")
-            implementation("io.insert-koin:koin-android:3.5.0")
+            implementation("io.insert-koin:koin-compose:1.1.0")
         }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
@@ -99,16 +107,19 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
