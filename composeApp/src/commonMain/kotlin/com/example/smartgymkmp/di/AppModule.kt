@@ -1,9 +1,11 @@
 package com.example.smartgymkmp.di
 
+import MemberRepository
 import com.example.smartgymkmp.data.repositry.AuthRepositoryImpl
 import com.example.smartgymkmp.domain.model.repositry.AuthRepository
 import com.example.smartgymkmp.domain.model.usecase.LoginUseCase
 import com.example.smartgymkmp.presentation.login.LoginViewModel
+import com.example.smartgymkmp.viewmodels.MemberViewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -20,4 +22,11 @@ val appModule = module {
             authRepository = get()
         )
     }
+
+    factory {
+        MemberViewModel(
+            repository = get()
+        )
+    }
 }
+

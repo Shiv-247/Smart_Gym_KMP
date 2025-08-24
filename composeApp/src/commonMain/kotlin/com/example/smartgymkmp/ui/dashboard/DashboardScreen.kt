@@ -28,12 +28,13 @@ import com.example.smartgymkmp.ui.dashboard.composables.HeroSection
 import com.example.smartgymkmp.ui.dashboard.composables.LifestyleSection
 import com.example.smartgymkmp.ui.dashboard.composables.MotivationSection
 import com.example.smartgymkmp.ui.dashboard.composables.WorkoutHubSection
+import com.example.smartgymkmp.viewmodels.MemberViewModel
 import kotlinx.coroutines.launch
 import kotlin.compareTo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(viewModel: MemberViewModel) {
     val scrollState = rememberScrollState()
 
     Scaffold(
@@ -68,7 +69,7 @@ fun DashboardScreen() {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             // Top Section: Hero / Quick Info
-            HeroSection()
+            HeroSection(viewModel)
 
             // Middle Section: Smart Workout Hub
             WorkoutHubSection()

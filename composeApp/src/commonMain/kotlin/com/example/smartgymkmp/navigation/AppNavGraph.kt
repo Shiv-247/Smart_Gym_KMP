@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.smartgymkmp.presentation.login.LoginViewModel
 import com.example.smartgymkmp.ui.dashboard.DashboardScreen
 import com.example.smartgymkmp.ui.login.LoginScreen
-import com.example.smartgymkmp.ui.membermanagement.MemberManagementScreen
+import com.example.smartgymkmp.viewmodels.MemberViewModel
 import org.koin.compose.koinInject
 
 @Composable
@@ -17,6 +17,7 @@ fun AppNavGraph(
     routine: MutableState<Map<String, String>>,
 ) {
     val loginViewModel: LoginViewModel = koinInject()
+    val memberViewModel: MemberViewModel = koinInject()
 
     NavHost(
         navController = navController,
@@ -44,14 +45,7 @@ fun AppNavGraph(
         )
 
         composable("dashboard") {
-            DashboardScreen(
-//                navController = navController,
-//                routine = dummyRoutine,
-            )
-        }
-
-        composable("memberManagement") {
-            MemberManagementScreen(navController)
+            DashboardScreen(viewModel = memberViewModel)
         }
 
         composable("memberProfile/{memberId}") { backStackEntry ->

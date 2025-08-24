@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -23,6 +25,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,12 +36,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartgymkmp.viewmodels.MemberViewModel
 
 @Composable
-fun HeroSection() {
+fun HeroSection(viewModel: MemberViewModel, memberId: String = "1") {
     var selectedMood by remember { mutableStateOf(2) }
+    val moods = listOf("😴", "😐", "😊", "💪", "🔥")
+    val calories by viewModel.calories.collectAsState()
+
+    // Load calories data when composable is first created
+    LaunchedEffect(memberId) {
+        viewModel.calculateCalories(memberId)
+    }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -47,12 +61,14 @@ fun HeroSection() {
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            // User greeting
+            // User greeting and other sections remain the same...
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-            ) {
+            )
+            {
                 Column {
                     Text(
                         "Good morning, Alex",
@@ -82,38 +98,7 @@ fun HeroSection() {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Next workout with countdown
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.Default.Timer,
-                    contentDescription = "Countdown",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Column {
-                    Text(
-                        "Upper Body Strength",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        "Starts in 2h 15m",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Button(onClick = { /* TODO */ }) {
-                    Text("Start Now")
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(10.dp))
 
             // Daily goal rings
             Row(
@@ -122,7 +107,7 @@ fun HeroSection() {
             ) {
                 GoalRing(
                     title = "Calories",
-                    current = 450,
+                    current = calories, // Use dynamic calories from viewModel
                     target = 800,
                     color = Color(0xFF4CAF50)
                 )
@@ -140,9 +125,7 @@ fun HeroSection() {
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Mood selector
+            // Fix the mood selector by removing the duplicate selectedMood declaration
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -152,21 +135,21 @@ fun HeroSection() {
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                var selectedMood by remember { mutableStateOf(2) }
-                Row {
-                    val moods = listOf("😴", "😐", "😊", "💪", "🔥")
-                    moods.forEachIndexed { index, mood ->
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(moods.size) { index ->
                         Box(
                             modifier = Modifier
                                 .padding(4.dp)
                                 .clip(CircleShape)
                                 .background(if (selectedMood == index) MaterialTheme.colorScheme.primaryContainer else Color.Transparent)
                                 .clickable { selectedMood = index }
-                                .padding(4.dp)
+                                .padding(8.dp)
                         ) {
                             Text(
-                                text = mood,
-                                fontSize = 20.sp
+                                text = moods[index],
+                                fontSize = 24.sp
                             )
                         }
                     }
